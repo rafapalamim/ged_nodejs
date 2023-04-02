@@ -1,0 +1,11 @@
+FROM node:19.8.1-alpine3.17
+
+WORKDIR /home/node/api
+
+RUN apk update && apk upgrade
+
+RUN apk add curl ca-certificates
+
+USER 1000;
+
+CMD ["tail","-f","/dev/null"]
