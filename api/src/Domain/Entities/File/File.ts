@@ -1,67 +1,61 @@
 import Entity from "../Entity";
-import Metadata from "./Metadata";
-import Type from "./Type";
+import Extension from "./FileExtension";
+
+export enum HistoricTypesEnum {
+    ACCESS = "access",
+    DELETE = "delete",
+    SIGNATURE = "signature",
+}
+
+type HistoricType = {
+    action: HistoricTypesEnum,
+    user: string,
+    ip: string,
+    showable: boolean,
+    created_at: Date
+}
 
 type FileType = {
+    document_id: string,
     name: string,
-    ext: string,
-    mimetype: string,
+    extension: Extension,
+    format_id: string,
     size: number,
-    identifiedByType: Type,
-    identifiedByValue?: string,
-    metadata: Array<Metadata> | [],
+    historic: HistoricType[],
     created_at?: Date,
     updated_at?: Date,
     deleted_at?: Date
 }
 
-export default class File extends Entity<FileType> {
-
+export default class File extends Entity<FileType>
+{
     constructor(props: FileType, id?: string) {
         super(props, id);
-        this.validate();
+        // this.validate();
+    }
+
+    get documentId(): string {
+        return this.props.document_id;
     }
 
     get name(): string {
         return this.props.name;
     }
 
-    get ext(): string {
-        return this.props.ext;
+    get extension(): Extension {
+        return this.props.extension;
     }
 
-    get mimetype(): string {
-        return this.props.mimetype;
+    get formatId(): string {
+        return this.props.format_id;
     }
 
     get size(): number {
         return this.props.size;
     }
 
-    get metadata(): Array<Metadata> {
-        return this.props.metadata;
-    }
-
-    get type(): Type {
-        return this.props.identifiedByType;
-    }
-
-    private validate() {
-        if (!this.props.name) {
-            throw new Error("Name is required");
-        }
-
-        if (!this.props.ext) {
-            throw new Error("Extension is required");
-        }
-
-        if (!this.props.mimetype) {
-            throw new Error("Mimetype is required");
-        }
-
-        if (this.props.size <= 0) {
-            throw new Error("Size needs to be greater than zero");
-        }
+    get historic(): HistoricType[] {
+        return this.props.historic;
     }
 
 }
